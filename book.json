@@ -1,0 +1,23 @@
+{
+    "title": "ECMAScript 6 入门",
+	  "description": "ECMAScript 6 入门",
+    "author": "jser_cao",
+    "language": "zh-hans",
+    "gitbook": "3.2.2",
+	  "plugins": [ "github", "navigator" ],
+    "pluginsConfig": {
+      "theme-default": {
+        "showLevel": true
+      },
+      "github": {
+            "url": "https://github.com/jsercao/es6-gitbook.git"
+        },
+        "anchor-navigation-ex": {
+            "isRewritePageTitle": true,
+            "isShowTocTitleIcon": true,
+            "tocLevel1Icon": "fa fa-hand-o-right",
+            "tocLevel2Icon": "fa fa-hand-o-right",
+            "tocLevel3Icon": "fa fa-hand-o-right"
+        }
+    }
+}
