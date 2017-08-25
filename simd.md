@@ -167,7 +167,7 @@ SIMD.Int16x8.subSaturate(c, d)
 // Int16x8[-32768, 0, 0, 0, 0, 0, 0, 0, 0]
 ```
 
-上面代码中，`Uint16`的最小值是`0`，`subSaturate`的最小值是`-32678`。一旦运算发生溢出，就返回最小值。
+上面代码中，`Uint16`的最小值是`0`，`Int16`的最小值是`-32678`。一旦运算发生溢出，就返回最小值。
 
 ### SIMD.type.mul，SIMD.type.div，SIMD.type.sqrt
 
@@ -629,17 +629,17 @@ SIMD.Int32x4.not(a)
 
 SIMD提供以下方法，用来将一种数据类型转为另一种数据类型。
 
-- `SIMD.type.fromFloat32x4()`
-- `SIMD.type.fromFloat32x4Bits()`
-- `SIMD.type.fromFloat64x2Bits()`
-- `SIMD.type.fromInt32x4()`
-- `SIMD.type.fromInt32x4Bits()`
-- `SIMD.type.fromInt16x8Bits()`
-- `SIMD.type.fromInt8x16Bits()`
-- `SIMD.type.fromUint32x4()`
-- `SIMD.type.fromUint32x4Bits()`
-- `SIMD.type.fromUint16x8Bits()`
-- `SIMD.type.fromUint8x16Bits()`
+- `SIMD.%type%.fromFloat32x4()`
+- `SIMD.%type%.fromFloat32x4Bits()`
+- `SIMD.%type%.fromFloat64x2Bits()`
+- `SIMD.%type%.fromInt32x4()`
+- `SIMD.%type%.fromInt32x4Bits()`
+- `SIMD.%type%.fromInt16x8Bits()`
+- `SIMD.%type%.fromInt8x16Bits()`
+- `SIMD.%type%.fromUint32x4()`
+- `SIMD.%type%.fromUint32x4Bits()`
+- `SIMD.%type%.fromUint16x8Bits()`
+- `SIMD.%type%.fromUint8x16Bits()`
 
 带有`Bits`后缀的方法，会原封不动地将二进制位拷贝到新的数据类型；不带后缀的方法，则会进行数据类型转换。
 
@@ -713,3 +713,4 @@ function average(list) {
 ```
 
 上面代码先是每隔四位，将所有的值读入一个 SIMD，然后立刻累加。然后，得到累加值四个通道的总和，再除以`n`就可以了。
+

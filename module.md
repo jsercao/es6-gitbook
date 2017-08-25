@@ -171,7 +171,7 @@ setTimeout(() => foo = 'baz', 500);
 
 上面代码输出变量`foo`，值为`bar`，500毫秒之后变成`baz`。
 
-这一点与 CommonJS 规范完全不同。CommonJS 模块输出的是值的缓存，不存在动态更新，详见下文《ES6模块加载的实质》一节。
+这一点与 CommonJS 规范完全不同。CommonJS 模块输出的是值的缓存，不存在动态更新，详见下文《Module 的加载实现》一节。
 
 最后，`export`命令可以出现在模块的任何位置，只要处于模块顶层就可以。如果处于块级作用域内，就会报错，下一节的`import`命令也是如此。这是因为处于条件代码块之中，就没法做静态优化了，违背了ES6模块的设计初衷。
 
@@ -205,7 +205,7 @@ function setName(element) {
 import { lastName as surname } from './profile';
 ```
 
-`import`后面的`from`指定模块文件的位置，可以是相对路径，也可以是绝对路径，`.js`路径可以省略。如果只是模块名，不带有路径，那么必须有配置文件，告诉 JavaScript 引擎该模块的位置。
+`import`后面的`from`指定模块文件的位置，可以是相对路径，也可以是绝对路径，`.js`后缀可以省略。如果只是模块名，不带有路径，那么必须有配置文件，告诉 JavaScript 引擎该模块的位置。
 
 ```javascript
 import {myMethod} from 'util';
@@ -269,6 +269,14 @@ import { foo, bar } from 'my_module';
 ```
 
 上面代码中，虽然`foo`和`bar`在两个语句中加载，但是它们对应的是同一个`my_module`实例。也就是说，`import`语句是 Singleton 模式。
+
+目前阶段，通过 Babel 转码，CommonJS 模块的`require`命令和 ES6 模块的`import`命令，可以写在同一个模块里面，但是最好不要这样做。因为`import`在静态解析阶段执行，所以它是一个模块之中最早执行的。下面的代码可能不会得到预期结果。
+
+```javascript
+require('core-js/modules/es6.symbol');
+require('core-js/modules/es6.promise');
+import React from 'React';
+```
 
 ## 模块的整体加载
 
@@ -435,10 +443,10 @@ export 42;
 import _ from 'lodash';
 ```
 
-如果想在一条`import`语句中，同时输入默认方法和其他变量，可以写成下面这样。
+如果想在一条`import`语句中，同时输入默认方法和其他接口，可以写成下面这样。
 
 ```javascript
-import _, { each } from 'lodash';
+import _, { each, each as forEach } from 'lodash';
 ```
 
 对应上面代码的`export`语句如下。
@@ -617,10 +625,10 @@ export {users} from './users';
 
 ```javascript
 // script.js
-import {db, users} from './constants';
+import {db, users} from './index';
 ```
 
-## import
+## import()
 
 ### 简介
 
@@ -635,7 +643,7 @@ if (x === 2) {
 
 上面代码中，引擎处理`import`语句是在编译时，这时不会去分析或执行`if`语句，所以`import`语句放在`if`代码块之中毫无意义，因此会报句法错误，而不是执行时错误。也就是说，`import`和`export`命令只能在模块的顶层，不能在代码块之中（比如，在`if`代码块之中，或在函数之中）。
 
-这样的设计，固然有利于编译器提高效率，但也导致无法在运行时加载模块。从语法上，条件加载就不可能实现。如果`import`命令要取代 Node 的`require`方法，这就形成了一个障碍。因为`require`是运行时加载模块，`import`命令无法取代`require`的动态加载功能。
+这样的设计，固然有利于编译器提高效率，但也导致无法在运行时加载模块。在语法上，条件加载就不可能实现。如果`import`命令要取代 Node 的`require`方法，这就形成了一个障碍。因为`require`是运行时加载模块，`import`命令无法取代`require`的动态加载功能。
 
 ```javascript
 const path = './' + fileName;
@@ -776,3 +784,4 @@ async function main() {
 }
 main();
 ```
+

@@ -320,7 +320,7 @@ var Thunk = function(fn){
 };
 
 // ES6版本
-var Thunk = function(fn) {
+const Thunk = function(fn) {
   return function (...args) {
     return function (callback) {
       return fn.call(this, ...args, callback);
@@ -342,10 +342,9 @@ readFileThunk(fileA)(callback);
 function f(a, cb) {
   cb(a);
 }
-let ft = Thunk(f);
+const ft = Thunk(f);
 
-let log = console.log.bind(console);
-ft(1)(log) // 1
+ft(1)(console.log) // 1
 ```
 
 ### Thunkify 模块
@@ -507,10 +506,10 @@ run(g);
 
 ```javascript
 var g = function* (){
-  var f1 = yield readFile('fileA');
-  var f2 = yield readFile('fileB');
+  var f1 = yield readFileThunk('fileA');
+  var f2 = yield readFileThunk('fileB');
   // ...
-  var fn = yield readFile('fileN');
+  var fn = yield readFileThunk('fileN');
 };
 
 run(g);

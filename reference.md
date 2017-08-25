@@ -37,7 +37,7 @@
 - kangax, [Javascript quiz. ES6 edition](http://perfectionkills.com/javascript-quiz-es6/): ES6小测试
 - Jeremy Fairbank, [HTML5DevConf ES7 and Beyond!](https://speakerdeck.com/jfairbank/html5devconf-es7-and-beyond): ES7新增语法点介绍
 
-## let和const
+## let 和 const
 
 - Kyle Simpson, [For and against let](http://davidwalsh.name/for-and-against-let): 讨论let命令的作用域
 - kangax, [Why typeof is no longer “safe”](http://es-discourse.com/t/why-typeof-is-no-longer-safe/15): 讨论在块级作用域内，let命令的变量声明和赋值的行为
@@ -65,10 +65,12 @@
 - Mathias Bynens, [Unicode-aware regular expressions in ES6](https://mathiasbynens.be/notes/es6-unicode-regex): 详细介绍正则表达式的u修饰符
 - Axel Rauschmayer, [New regular expression features in ECMAScript 6](http://www.2ality.com/2015/07/regexp-es6.html)：ES6正则特性的详细介绍
 - Yang Guo, [RegExp lookbehind assertions](http://v8project.blogspot.jp/2016/02/regexp-lookbehind-assertions.html)：介绍后行断言
+- Axel Rauschmayer, [ES proposal: RegExp named capture groups](http://2ality.com/2017/05/regexp-named-capture-groups.html): 具名组匹配的介绍
 
 ## 数值
 
 - Nicolas Bevacqua, [ES6 Number Improvements in Depth](http://ponyfoo.com/articles/es6-number-improvements-in-depth)
+- Axel Rauschmayer, [ES proposal: arbitrary precision integers](http://2ality.com/2017/03/es-integer.html)
 
 ## 数组
 
@@ -88,6 +90,7 @@
 - Derick Bailey, [Do ES6 Arrow Functions Really Solve “this” In JavaScript?](http://derickbailey.com/2015/09/28/do-es6-arrow-functions-really-solve-this-in-javascript/)：使用箭头函数处理this指向，必须非常小心
 - Mark McDonnell, [Understanding recursion in functional JavaScript programming](http://www.integralist.co.uk/posts/js-recursion.html): 如何自己实现尾递归优化
 - Nicholas C. Zakas, [The ECMAScript 2016 change you probably don't know](https://www.nczonline.net/blog/2016/10/the-ecmascript-2016-change-you-probably-dont-know/): 使用参数默认值时，不能在函数内部显式开启严格模式
+- Axel Rauschmayer, [ES proposal: optional catch binding](http://2ality.com/2017/08/optional-catch-binding.html)
 
 ## 对象
 
@@ -220,6 +223,9 @@
 - Ian Elliot, [Reading A BMP File In JavaScript](http://www.i-programmer.info/projects/36-web/6234-reading-a-bmp-file-in-javascript.html)	
 - Renato Mangini, [How to convert ArrayBuffer to and from String](http://updates.html5rocks.com/2012/06/How-to-convert-ArrayBuffer-to-and-from-String)
 - Axel Rauschmayer, [Typed Arrays in ECMAScript 6](http://www.2ality.com/2015/09/typed-arrays.html)
+- Axel Rauschmayer, [ES proposal: Shared memory and atomics](http://2ality.com/2017/01/shared-array-buffer.html)
+- Lin Clark, [Avoiding race conditions in SharedArrayBuffers with Atomics](https://hacks.mozilla.org/2017/06/avoiding-race-conditions-in-sharedarraybuffers-with-atomics/): Atomics 对象使用场景的解释
+- Lars T Hansen, [Shared memory - a brief tutorial](https://github.com/tc39/ecmascript_sharedmem/blob/master/TUTORIAL.md)
 
 ## SIMD
 
@@ -239,7 +245,7 @@
 - army8735, [Javascript Downcast](https://github.com/army8735/jsdc): 国产的ES6到ES5的转码器
 - esnext, [ES6 Module Transpiler](https://github.com/esnext/es6-module-transpiler)：基于node.js的将ES6模块转为ES5代码的命令行工具
 - Sebastian McKenzie, [BabelJS](http://babeljs.io/): ES6转译器
-- SystemJS, [SystemJS](https://github.com/systemjs/systemjs): 在浏览器中加载AMD、CJS、ES6模块的一个垫片库
-- Modernizr, [HTML5 Cross Browser Polyfills](https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills#ecmascript-6-harmony): ES6垫片库清单
-- Facebook, [regenerator](https://github.com/facebook/regenerator): 将Generator函数转为ES5的转码器
+- SystemJS, [SystemJS](https://github.com/systemjs/systemjs): 在浏览器中加载 AMD、CJS、ES6 模块的一个垫片库
+- Modernizr, [HTML5 Cross Browser Polyfills](https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills#ecmascript-6-harmony): ES6 垫片库清单
+- Facebook, [regenerator](https://github.com/facebook/regenerator): 将 Generator 函数转为 ES5 的转码器
 

@@ -31,9 +31,9 @@ Number('0b111')  // 7
 Number('0o10')  // 8
 ```
 
-## Number.isFinite, Number.isNaN
+## Number.isFinite(), Number.isNaN()
 
-ES6在Number对象上，新提供了`Number.isFinite()`和`Number.isNaN()`两个方法。
+ES6 在`Number`对象上，新提供了`Number.isFinite()`和`Number.isNaN()`两个方法。
 
 `Number.isFinite()`用来检查一个数值是否为有限的（finite）。
 
@@ -48,7 +48,7 @@ Number.isFinite('15'); // false
 Number.isFinite(true); // false
 ```
 
-ES5可以通过下面的代码，部署`Number.isFinite`方法。
+ES5 可以通过下面的代码，部署`Number.isFinite`方法。
 
 ```javascript
 (function (global) {
@@ -77,7 +77,7 @@ Number.isNaN('true'/0) // true
 Number.isNaN('true'/'true') // true
 ```
 
-ES5通过下面的代码，部署`Number.isNaN()`。
+ES5 通过下面的代码，部署`Number.isNaN()`。
 
 ```javascript
 (function (global) {
@@ -109,9 +109,9 @@ Number.isNaN("NaN") // false
 Number.isNaN(1) // false
 ```
 
-## Number.parseInt, Number.parseFloat
+## Number.parseInt(), Number.parseFloat()
 
-ES6将全局方法`parseInt()`和`parseFloat()`，移植到Number对象上面，行为完全保持不变。
+ES6 将全局方法`parseInt()`和`parseFloat()`，移植到`Number`对象上面，行为完全保持不变。
 
 ```javascript
 // ES5的写法
@@ -130,9 +130,9 @@ Number.parseInt === parseInt // true
 Number.parseFloat === parseFloat // true
 ```
 
-## Number.isInteger
+## Number.isInteger()
 
-`Number.isInteger()`用来判断一个值是否为整数。需要注意的是，在JavaScript内部，整数和浮点数是同样的储存方法，所以3和3.0被视为同一个值。
+`Number.isInteger()`用来判断一个值是否为整数。需要注意的是，在 JavaScript 内部，整数和浮点数是同样的储存方法，所以3和3.0被视为同一个值。
 
 ```javascript
 Number.isInteger(25) // true
@@ -142,7 +142,7 @@ Number.isInteger("15") // false
 Number.isInteger(true) // false
 ```
 
-ES5可以通过下面的代码，部署`Number.isInteger()`。
+ES5 可以通过下面的代码，部署`Number.isInteger()`。
 
 ```javascript
 (function (global) {
@@ -151,8 +151,8 @@ ES5可以通过下面的代码，部署`Number.isInteger()`。
 
   Object.defineProperty(Number, 'isInteger', {
     value: function isInteger(value) {
-      return typeof value === 'number' && isFinite(value) &&
-        value > -9007199254740992 && value < 9007199254740992 &&
+      return typeof value === 'number' &&
+        isFinite(value) &&
         floor(value) === value;
     },
     configurable: true,
@@ -207,7 +207,7 @@ withinErrorMargin(0.2 + 0.2, 0.3)
 
 上面的代码为浮点数运算，部署了一个误差检查函数。
 
-## 安全整数和Number.isSafeInteger
+## 安全整数和Number.isSafeInteger()
 
 JavaScript能够准确表示的整数范围在`-2^53`到`2^53`之间（不含两个端点），超过这个范围，无法精确表示这个值。
 
@@ -316,7 +316,7 @@ trusty(1, 2, 3)
 
 ES6在Math对象上新增了17个与数学相关的方法。所有这些方法都是静态方法，只能在Math对象上调用。
 
-### Math.trunc
+### Math.trunc()
 
 `Math.trunc`方法用于去除一个数的小数部分，返回整数部分。
 
@@ -353,7 +353,7 @@ Math.trunc = Math.trunc || function(x) {
 
 ### Math.sign
 
-`Math.sign`方法用来判断一个数到底是正数、负数、还是零。
+`Math.sign`方法用来判断一个数到底是正数、负数、还是零。对于非数值，会先将其转换为数值。
 
 它会返回五种值。
 
@@ -369,6 +369,7 @@ Math.sign(5) // +1
 Math.sign(0) // +0
 Math.sign(-0) // -0
 Math.sign(NaN) // NaN
+Math.sign('9'); // +1
 Math.sign('foo'); // NaN
 Math.sign();      // NaN
 ```
@@ -603,9 +604,9 @@ Math.log2 = Math.log2 || function(x) {
 };
 ```
 
-### 三角函数方法
+### 双曲函数方法
 
-ES6新增了6个三角函数方法。
+ES6新增了6个双曲函数方法。
 
 - `Math.sinh(x)` 返回`x`的双曲正弦（hyperbolic sine）
 - `Math.cosh(x)` 返回`x`的双曲余弦（hyperbolic cosine）
@@ -678,3 +679,89 @@ Math.pow(99, 99)
 ```
 
 上面代码中，两个运算结果的最后一位有效数字是有差异的。
+
+## Integer 数据类型
+
+### 简介
+
+JavaScript 所有数字都保存成64位浮点数，这决定了整数的精确程度只能到53个二进制位。大于这个范围的整数，JavaScript 是无法精确表示的，这使得 JavaScript 不适合进行科学和金融方面的精确计算。
+
+现在有一个[提案](https://github.com/tc39/proposal-bigint)，引入了新的数据类型 Integer（整数），来解决这个问题。整数类型的数据只用来表示整数，没有位数的限制，任何位数的整数都可以精确表示。
+
+为了与 Number 类型区别，Integer 类型的数据必须使用后缀`n`表示。
+
+```javascript
+1n + 2n // 3n
+```
+
+二进制、八进制、十六进制的表示法，都要加上后缀`n`。
+
+```javascript
+0b1101n // 二进制
+0o777n // 八进制
+0xFFn // 十六进制
+```
+
+`typeof`运算符对于 Integer 类型的数据返回`integer`。
+
+```javascript
+typeof 123n
+// 'integer'
+```
+
+JavaScript 原生提供`Integer`对象，用来生成 Integer 类型的数值。转换规则基本与`Number()`一致。
+
+```javascript
+Integer(123) // 123n
+Integer('123') // 123n
+Integer(false) // 0n
+Integer(true) // 1n
+```
+
+以下的用法会报错。
+
+```javascript
+new Integer() // TypeError
+Integer(undefined) //TypeError
+Integer(null) // TypeError
+Integer('123n') // SyntaxError
+Integer('abc') // SyntaxError
+```
+
+### 运算
+
+在数学运算方面，Integer 类型的`+`、`-`、`*`和`**`这四个二元运算符，与 Number 类型的行为一致。除法运算`/`会舍去小数部分，返回一个整数。
+
+```javascript
+9n / 5n
+// 1n
+```
+
+几乎所有的 Number 运算符都可以用在 Integer，但是有两个除外：不带符号的右移位运算符`>>>`和一元的求正运算符`+`，使用时会报错。前者是因为`>>>`要求最高位补0，但是 Integer 类型没有最高位，导致这个运算符无意义。后者是因为一元运算符`+`在 asm.js 里面总是返回 Number 类型或者报错。
+
+Integer 类型不能与 Number 类型进行混合运算。
+
+```javascript
+1n + 1
+// 报错
+```
+
+这是因为无论返回的是 Integer 或 Number，都会导致丢失信息。比如`(2n**53n + 1n) + 0.5`这个表达式，如果返回 Integer 类型，`0.5`这个小数部分会丢失；如果返回 Number 类型，会超过 53 位精确数字，精度下降。
+
+相等运算符（`==`）会改变数据类型，也是不允许混合使用。
+
+```javascript
+0n == 0
+// 报错 TypeError
+
+0n == false
+// 报错 TypeError
+```
+
+精确相等运算符（`===`）不会改变数据类型，因此可以混合使用。
+
+```javascript
+0n === 0
+// false
+```
+

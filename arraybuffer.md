@@ -1,22 +1,22 @@
-# 二进制数组
+# ArrayBuffer
 
-二进制数组（`ArrayBuffer`对象、`TypedArray`视图和`DataView`视图）是 JavaScript 操作二进制数据的一个接口。这些对象早就存在，属于独立的规格（2011年2月发布），ES6 将它们纳入了 ECMAScript 规格，并且增加了新的方法。
+`ArrayBuffer`对象、`TypedArray`视图和`DataView`视图是 JavaScript 操作二进制数据的一个接口。这些对象早就存在，属于独立的规格（2011年2月发布），ES6 将它们纳入了 ECMAScript 规格，并且增加了新的方法。它们都是以数组的语法处理二进制数据，所以统称为二进制数组。
 
-这个接口的原始设计目的，与 WebGL 项目有关。所谓WebGL，就是指浏览器与显卡之间的通信接口，为了满足 JavaScript 与显卡之间大量的、实时的数据交换，它们之间的数据通信必须是二进制的，而不能是传统的文本格式。文本格式传递一个32位整数，两端的 JavaScript 脚本与显卡都要进行格式转化，将非常耗时。这时要是存在一种机制，可以像 C 语言那样，直接操作字节，将4个字节的32位整数，以二进制形式原封不动地送入显卡，脚本的性能就会大幅提升。
+这个接口的原始设计目的，与 WebGL 项目有关。所谓 WebGL，就是指浏览器与显卡之间的通信接口，为了满足 JavaScript 与显卡之间大量的、实时的数据交换，它们之间的数据通信必须是二进制的，而不能是传统的文本格式。文本格式传递一个32位整数，两端的 JavaScript 脚本与显卡都要进行格式转化，将非常耗时。这时要是存在一种机制，可以像 C 语言那样，直接操作字节，将4个字节的32位整数，以二进制形式原封不动地送入显卡，脚本的性能就会大幅提升。
 
-二进制数组就是在这种背景下诞生的。它很像C语言的数组，允许开发者以数组下标的形式，直接操作内存，大大增强了JavaScript处理二进制数据的能力，使得开发者有可能通过JavaScript与操作系统的原生接口进行二进制通信。
+二进制数组就是在这种背景下诞生的。它很像C语言的数组，允许开发者以数组下标的形式，直接操作内存，大大增强了 JavaScript 处理二进制数据的能力，使得开发者有可能通过 JavaScript 与操作系统的原生接口进行二进制通信。
 
 二进制数组由三类对象组成。
 
 **（1）`ArrayBuffer`对象**：代表内存之中的一段二进制数据，可以通过“视图”进行操作。“视图”部署了数组接口，这意味着，可以用数组的方法操作内存。
 
-**（2）TypedArray视图**：共包括9种类型的视图，比如`Uint8Array`（无符号8位整数）数组视图, `Int16Array`（16位整数）数组视图, `Float32Array`（32位浮点数）数组视图等等。
+**（2）`TypedArray`视图**：共包括9种类型的视图，比如`Uint8Array`（无符号8位整数）数组视图, `Int16Array`（16位整数）数组视图, `Float32Array`（32位浮点数）数组视图等等。
 
-**（3）`DataView`视图**：可以自定义复合格式的视图，比如第一个字节是Uint8（无符号8位整数）、第二、三个字节是Int16（16位整数）、第四个字节开始是Float32（32位浮点数）等等，此外还可以自定义字节序。
+**（3）`DataView`视图**：可以自定义复合格式的视图，比如第一个字节是 Uint8（无符号8位整数）、第二、三个字节是 Int16（16位整数）、第四个字节开始是 Float32（32位浮点数）等等，此外还可以自定义字节序。
 
 简单说，`ArrayBuffer`对象代表原始的二进制数据，TypedArray视图用来读写简单类型的二进制数据，`DataView`视图用来读写复杂类型的二进制数据。
 
-TypedArray视图支持的数据类型一共有9种（`DataView`视图支持除`Uint8C`以外的其他8种）。
+TypedArray 视图支持的数据类型一共有9种（`DataView`视图支持除`Uint8C`以外的其他8种）。
 
 数据类型 | 字节长度 | 含义 | 对应的C语言类型
 --------|--------|----|---------------
@@ -40,11 +40,11 @@ Float64|8|64位浮点数|double
 - Canvas
 - WebSockets
 
-## ArrayBuffer对象
+## ArrayBuffer 对象
 
 ### 概述
 
-`ArrayBuffer`对象代表储存二进制数据的一段内存，它不能直接读写，只能通过视图（TypedArray视图和`DataView`视图)来读写，视图的作用是以指定格式解读二进制数据。
+`ArrayBuffer`对象代表储存二进制数据的一段内存，它不能直接读写，只能通过视图（`TypedArray`视图和`DataView`视图)来读写，视图的作用是以指定格式解读二进制数据。
 
 `ArrayBuffer`也是一个构造函数，可以分配一段可以存放数据的连续内存区域。
 
@@ -975,61 +975,73 @@ bitmap.pixels = new Uint8Array(buffer, start);
 
 ## SharedArrayBuffer
 
-JavaScript 是单线程的，web worker 引入了多进程，每个进程的数据都是隔离的，通过`postMessage()`通信，即通信的数据是复制的。如果数据量比较大，这种通信的效率显然比较低。
+JavaScript 是单线程的，Web worker 引入了多线程：主线程用来与用户互动，Worker 线程用来承担计算任务。每个线程的数据都是隔离的，通过`postMessage()`通信。下面是一个例子。
 
 ```javascript
+// 主线程
 var w = new Worker('myworker.js');
 ```
 
-上面代码中，主进程新建了一个 Worker 进程。该进程与主进程之间会有一个通信渠道，主进程通过`w.postMessage`向 Worker 进程发消息，同时通过`message`事件监听 Worker 进程的回应。
+上面代码中，主线程新建了一个 Worker 线程。该线程与主线程之间会有一个通信渠道，主线程通过`w.postMessage`向 Worker 线程发消息，同时通过`message`事件监听 Worker 线程的回应。
 
 ```javascript
+// 主线程
 w.postMessage('hi');
 w.onmessage = function (ev) {
   console.log(ev.data);
 }
 ```
 
-上面代码中，主进程先发一个消息`hi`，然后在监听到 Worker 进程的回应后，就将其打印出来。
+上面代码中，主线程先发一个消息`hi`，然后在监听到 Worker 线程的回应后，就将其打印出来。
 
-Worker 进程也是通过监听`message`事件，来获取主进程发来的消息，并作出反应。
+Worker 线程也是通过监听`message`事件，来获取主线程发来的消息，并作出反应。
 
 ```javascript
+// Worker 线程
 onmessage = function (ev) {
   console.log(ev.data);
   postMessage('ho');
 }
 ```
 
-主进程与 Worker 进程之间，可以传送各种数据，不仅仅是字符串，还可以传送二进制数据。很容易想到，如果有大量数据要传送，留出一块内存区域，主进程与 Worker 进程共享，两方都可以读写，那么就会大大提高效率。
+线程之间的数据交换可以是各种格式，不仅仅是字符串，也可以是二进制数据。这种交换采用的是复制机制，即一个进程将需要分享的数据复制一份，通过`postMessage`方法交给另一个进程。如果数据量比较大，这种通信的效率显然比较低。很容易想到，这时可以留出一块内存区域，由主线程与 Worker 线程共享，两方都可以读写，那么就会大大提高效率，协作起来也会比较简单（不像`postMessage`那么麻烦）。
 
-ES2017 引入[`SharedArrayBuffer`](https://github.com/tc39/ecmascript_sharedmem/blob/master/TUTORIAL.md)，允许多个 Worker 进程与主进程共享内存数据。`SharedArrayBuffer`的 API 与`ArrayBuffer`一模一样，唯一的区别是后者无法共享。
+ES2017 引入[`SharedArrayBuffer`](https://github.com/tc39/ecmascript_sharedmem/blob/master/TUTORIAL.md)，允许 Worker 线程与主线程共享同一块内存。`SharedArrayBuffer`的 API 与`ArrayBuffer`一模一样，唯一的区别是后者无法共享。
 
 ```javascript
+// 主线程
+
 // 新建 1KB 共享内存
 var sharedBuffer = new SharedArrayBuffer(1024);
 
-// 主窗口发送数据
+// 主线程将共享内存的地址发送出去
 w.postMessage(sharedBuffer);
 
-// 本地写入数据
+// 在共享内存上建立视图，供写入数据
 const sharedArray = new Int32Array(sharedBuffer);
 ```
 
 上面代码中，`postMessage`方法的参数是`SharedArrayBuffer`对象。
 
-Worker 进程从事件的`data`属性上面取到数据。
+Worker 线程从事件的`data`属性上面取到数据。
 
 ```javascript
+// Worker 线程
 var sharedBuffer;
 onmessage = function (ev) {
-   sharedBuffer = ev.data;  // 1KB 的共享内存，就是主窗口共享出来的那块内存
+  // 主线程共享的数据，就是 1KB 的共享内存
+  const sharedBuffer = ev.data;
+
+  // 在共享内存上建立视图，方便读写
+  const sharedArray = new Int32Array(sharedBuffer);
+
+  // ...
 };
 ```
 
-共享内存也可以在 Worker 进程创建，发给主进程。
+共享内存也可以在 Worker 线程创建，发给主线程。
 
-`SharedArrayBuffer`与`SharedArray`一样，本身是无法读写，必须在上面建立视图，然后通过视图读写。
+`SharedArrayBuffer`与`ArrayBuffer`一样，本身是无法读写的，必须在上面建立视图，然后通过视图读写。
 
 ```javascript
 // 分配 10 万个 32 位整数占据的内存空间
@@ -1045,25 +1057,47 @@ var primes = new PrimeGenerator();
 for ( let i=0 ; i < ia.length ; i++ )
   ia[i] = primes.next();
 
-// 向 Worker 进程发送这段共享内存
+// 向 Worker 线程发送这段共享内存
 w.postMessage(ia);
 ```
 
-Worker 进程收到数据后的处理如下。
+Worker 线程收到数据后的处理如下。
 
 ```javascript
+// Worker 线程
 var ia;
 onmessage = function (ev) {
   ia = ev.data;
   console.log(ia.length); // 100000
-  console.log(ia[37]); // 输出 163，因为这是第138个质数
+  console.log(ia[37]); // 输出 163，因为这是第38个质数
 };
 ```
 
-多个进程共享内存，最大的问题就是如何防止两个进程同时修改某个地址，或者说，当一个进程修改共享内存以后，必须有一个机制让其他进程同步。SharedArrayBuffer API 提供`Atomics`对象，保证所有共享内存的操作都是“原子性”的，并且可以在所有进程内同步。
+## Atomics 对象
+
+多线程共享内存，最大的问题就是如何防止两个线程同时修改某个地址，或者说，当一个线程修改共享内存以后，必须有一个机制让其他线程同步。SharedArrayBuffer API 提供`Atomics`对象，保证所有共享内存的操作都是“原子性”的，并且可以在所有线程内同步。
+
+什么叫“原子性操作”呢？现代编程语言中，一条普通的命令被编译器处理以后，会变成多条机器指令。如果是单线程运行，这是没有问题的；多线程环境并且共享内存时，就会出问题，因为这一组机器指令的运行期间，可能会插入其他线程的指令，从而导致运行结果出错。请看下面的例子。
 
 ```javascript
-// 主进程
+// 主线程
+ia[42] = 314159;  // 原先的值 191
+ia[37] = 123456;  // 原先的值 163
+
+// Worker 线程
+console.log(ia[37]);
+console.log(ia[42]);
+// 可能的结果
+// 123456
+// 191
+```
+
+上面代码中，主线程的原始顺序是先对42号位置赋值，再对37号位置赋值。但是，编译器和 CPU 为了优化，可能会改变这两个操作的执行顺序（因为它们之间互不依赖），先对37号位置赋值，再对42号位置赋值。而执行到一半的时候，Worker 线程可能就会来读取数据，导致打印出`123456`和`191`。
+
+下面是另一个例子。
+
+```javascript
+// 主线程
 var sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 100000);
 var ia = new Int32Array(sab);
 
@@ -1071,39 +1105,119 @@ for (let i = 0; i < ia.length; i++) {
   ia[i] = primes.next(); // 将质数放入 ia
 }
 
-// worker 进程
+// worker 线程
 ia[112]++; // 错误
 Atomics.add(ia, 112, 1); // 正确
 ```
 
-上面代码中，Worker 进程直接改写共享内存是不正确的。有两个原因，一是可能发生两个进程同时改写该地址，二是改写以后无法同步到其他 Worker 进程。所以，必须使用`Atomics.add()`方法进行改写。
+上面代码中，Worker 线程直接改写共享内存`ia[112]++`是不正确的。因为这行语句会被编译成多条机器指令，这些指令之间无法保证不会插入其他进程的指令。请设想如果两个线程同时`ia[112]++`，很可能它们得到的结果都是不正确的。
 
-下面是另一个例子。
+`Atomics`对象就是为了解决这个问题而提出，它可以保证一个操作所对应的多条机器指令，一定是作为一个整体运行的，中间不会被打断。也就是说，它所涉及的操作都可以看作是原子性的单操作，这可以避免线程竞争，提高多线程共享内存时的操作安全。所以，`ia[112]++`要改写成`Atomics.add(ia, 112, 1)`。
+
+`Atomics`对象提供多种方法。
+
+**（1）Atomics.store()，Atomics.load()**
+
+`store()`方法用来向共享内存写入数据，`load()`方法用来从共享内存读出数据。比起直接的读写操作，它们的好处是保证了读写操作的原子性。
+
+此外，它们还用来解决一个问题：多个线程使用共享线程的某个位置作为开关（flag），一旦该位置的值变了，就执行特定操作。这时，必须保证该位置的赋值操作，一定是在它前面的所有可能会改写内存的操作结束后执行；而该位置的取值操作，一定是在它后面所有可能会读取该位置的操作开始之前执行。`store`方法和`load`方法就能做到这一点，编译器不会为了优化，而打乱机器指令的执行顺序。
 
 ```javascript
-// 进程一
+Atomics.load(array, index)
+Atomics.store(array, index, value)
+```
+
+`store`方法接受三个参数：SharedBuffer 的视图、位置索引和值，返回`sharedArray[index]`的值。`load`方法只接受两个参数：SharedBuffer 的视图和位置索引，也是返回`sharedArray[index]`的值。
+
+```javascript
+// 主线程 main.js
+ia[42] = 314159;  // 原先的值 191
+Atomics.store(ia, 37, 123456);  // 原先的值是 163
+
+// Worker 线程 worker.js
+while (Atomics.load(ia, 37) == 163);
+console.log(ia[37]);  // 123456
+console.log(ia[42]);  // 314159
+```
+
+上面代码中，主线程的`Atomics.store`向42号位置的赋值，一定是早于37位置的赋值。只要37号位置等于163，Worker 线程就不会终止循环，而对37号位置和42号位置的取值，一定是在`Atomics.load`操作之后。
+
+**（2）Atomics.wait()，Atomics.wake()**
+
+使用`while`循环等待主线程的通知，不是很高效，如果用在主线程，就会造成卡顿，`Atomics`对象提供了`wait()`和`wake()`两个方法用于等待通知。这两个方法相当于锁内存，即在一个线程进行操作时，让其他线程休眠（建立锁），等到操作结束，再唤醒那些休眠的线程（解除锁）。
+
+```javascript
+Atomics.wait(sharedArray, index, value, time)
+```
+
+`Atomics.wait`用于当`sharedArray[index]`不等于`value`，就返回`not-equal`，否则就进入休眠，只有使用`Atomics.wake()`或者`time`毫秒以后才能唤醒。被`Atomics.wake()`唤醒时，返回`ok`，超时唤醒时返回`timed-out`。
+
+```javascript
+Atomics.wake(sharedArray, index, count)
+```
+
+`Atomics.wake`用于唤醒`count`数目在`sharedArray[index]`位置休眠的线程，让它继续往下运行。
+
+下面请看一个例子。
+
+```javascript
+// 线程一
 console.log(ia[37]);  // 163
 Atomics.store(ia, 37, 123456);
 Atomics.wake(ia, 37, 1);
 
-// 进程二
+// 线程二
 Atomics.wait(ia, 37, 163);
 console.log(ia[37]);  // 123456
 ```
 
-上面代码中，共享内存`ia`的第37号位置，原来的值是`163`。进程二使用`Atomics.wait()`方法，指定只要`ia[37]`等于`163`，就处于“等待”状态。进程一使用`Atomics.store()`方法，将`123456`放入`ia[37]`，然后使用`Atomics.wake()`方法将监视`ia[37]`的一个进程唤醒。
+上面代码中，共享内存视图`ia`的第37号位置，原来的值是`163`。进程二使用`Atomics.wait()`方法，指定只要`ia[37]`等于`163`，就进入休眠状态。进程一使用`Atomics.store()`方法，将`123456`放入`ia[37]`，然后使用`Atomics.wake()`方法将监视`ia[37]`的休眠线程唤醒。
 
-`Atomics`对象有以下方法。
+另外，基于`wait`和`wake`这两个方法的锁内存实现，可以看 Lars T Hansen 的 [js-lock-and-condition](https://github.com/lars-t-hansen/js-lock-and-condition) 这个库。
 
-- `Atomics.load(array, index)`：返回`array[index]`的值。
-- `Atomics.store(array, index, value)`：设置`array[index]`的值，返回这个值。
-- `Atomics.compareExchange(array, index, oldval, newval)`：如果`array[index]`等于`oldval`，就写入`newval`，返回`oldval`。
-- `Atomics.exchange(array, index, value)`：设置`array[index]`的值，返回旧的值。
-- `Atomics.add(array, index, value)`：将`value`加到`array[index]`，返回`array[index]`旧的值。
-- `Atomics.sub(array, index, value)`：将`value`从`array[index]`减去，返回`array[index]`旧的值。
-- `Atomics.and(array, index, value)`：将`value`与`array[index]`进行位运算`and`，放入`array[index]`，并返回旧的值。
-- `Atomics.or(array, index, value)`：将`value`与`array[index]`进行位运算`or`，放入`array[index]`，并返回旧的值。
-- `Atomics.xor(array, index, value)`：将`vaule`与`array[index]`进行位运算`xor`，放入`array[index]`，并返回旧的值。
-- `Atomics.wait(array, index, value, timeout)`：如果`array[index]`等于`value`，进程就进入休眠状态，必须通过`Atomics.wake()`唤醒。`timeout`指定多少毫秒之后，进入休眠。返回值是三个字符串（ok、not-equal、timed-out）中的一个。
-- `Atomics.wake(array, index, count)`：唤醒指定数目在某个位置休眠的进程。
+注意，浏览器的主线程有权“拒绝”休眠，这是为了防止用户失去响应。
+
+**（3）运算方法**
+
+共享内存上面的某些运算是不能被打断的，即不能在运算过程中，让其他线程改写内存上面的值。Atomics 对象提供了一些运算方法，防止数据被改写。
+
+```javascript
+Atomics.add(sharedArray, index, value)
+```
+
+`Atomics.add`用于将`value`加到`sharedArray[index]`，返回`sharedArray[index]`旧的值。
+
+```javascript
+Atomics.sub(sharedArray, index, value)
+```
+
+`Atomics.sub`用于将`value`从`sharedArray[index]`减去，返回`sharedArray[index]`旧的值。
+
+```javascript
+Atomics.and(sharedArray, index, value)
+```
+
+`Atomics.and`用于将`value`与`sharedArray[index]`进行位运算`and`，放入`sharedArray[index]`，并返回旧的值。
+
+```javascript
+Atomics.or(sharedArray, index, value)
+```
+
+`Atomics.or`用于将`value`与`sharedArray[index]`进行位运算`or`，放入`sharedArray[index]`，并返回旧的值。
+
+```javascript
+Atomics.xor(sharedArray, index, value)
+```
+
+`Atomic.xor`用于将`vaule`与`sharedArray[index]`进行位运算`xor`，放入`sharedArray[index]`，并返回旧的值。
+
+**（4）其他方法**
+
+`Atomics`对象还有以下方法。
+
+- `Atomics.compareExchange(sharedArray, index, oldval, newval)`：如果`sharedArray[index]`等于`oldval`，就写入`newval`，返回`oldval`。
+- `Atomics.exchange(sharedArray, index, value)`：设置`sharedArray[index]`的值，返回旧的值。
 - `Atomics.isLockFree(size)`：返回一个布尔值，表示`Atomics`对象是否可以处理某个`size`的内存锁定。如果返回`false`，应用程序就需要自己来实现锁定。
+
+`Atomics.compareExchange`的一个用途是，从 SharedArrayBuffer 读取一个值，然后对该值进行某个操作，操作结束以后，检查一下 SharedArrayBuffer 里面原来那个值是否发生变化（即被其他线程改写过）。如果没有改写过，就将它写回原来的位置，否则读取新的值，再重头进行一次操作。
+

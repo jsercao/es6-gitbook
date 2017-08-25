@@ -20,6 +20,7 @@
 * [Generator 函数的异步应用](generator-async.md)
 * [async 函数](async.md)
 * [Class](class.md)
+* [Class 的继承](class-extends.md)
 * [Decorator](decorator.md)
 * [Module 的语法](module.md)
 * [Module 的加载实现](module-loader.md)
